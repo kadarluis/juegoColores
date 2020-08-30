@@ -94,13 +94,16 @@
         <div id="verde" class="color verde right" data-color="verde"></div>
         <button id="btnEmpezar" class="btn-start" onclick="empezarJuego()">Empezar a jugar!</button>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
     <script>
         const celeste = document.getElementById('celeste')
         const violeta = document.getElementById('violeta')
         const naranja = document.getElementById('naranja')
         const verde = document.getElementById('verde')
         const btnEmpezar = document.getElementById('btnEmpezar')
-        const ultimoNivel = 10
+        const ultimoNivel = 2
+
 
         class Juego {
             constructor() {
@@ -116,7 +119,7 @@
             inicializar() {
                 this.elegirColor = this.elegirColor.bind(this)
                 this.siguienteNivel = this.siguienteNivel.bind(this)
-                btnEmpezar.classList.add('hide')
+                this.toggleBtnEmpezar()
                 this.nivel = 1
                 this.colores = {
                     celeste,
@@ -125,6 +128,17 @@
                     verde
                 }
             }
+
+            toggleBtnEmpezar() {
+                if (btnEmpezar.classList.contains('hide')) {
+                    btnEmpezar.classList.remove('hide')
+
+                } else {
+                    btnEmpezar.classList.add('hide')
+                }
+            }
+
+
 
             generarSecuencia() {
                 this.secuencia = new Array(ultimoNivel).fill(10).map(n => Math.floor(Math.random() * 4))
@@ -205,18 +219,40 @@
                             this.nivel++
                                 this.eliminarEventosClik()
                             if (this.nivel === (ultimoNivel + 1)) {
-                                // Gano
+                                this.ganoElJuego()
                             } else {
                                 setTimeout(this.siguienteNivel, 1500)
                             }
                         }
                 } else {
-                    // perdio
+                    this.perdioElJuego()
                 }
+            }
 
+            ganoElJuego() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Win',
+                    text: 'Ganaste el Jeugo!',
+
+                })
+
+                this.inicializar()
 
             }
 
+            perdioElJuego() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lost',
+                    text: 'Perdiste el Jeugo!',
+
+                })
+
+                this.eliminarEventosClik()
+                this.inicializar()
+
+            }
 
         }
 
